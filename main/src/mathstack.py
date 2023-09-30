@@ -5,9 +5,7 @@ def stack(equ):
     n = 0
     num = ""
     eq = equ
-    '''
-Before you ask, yes. I do know that there are other types, other than integers. I'm working out the kinks.
-    '''
+    # Before you ask, yes. I do know that there are other types, other than integers. I'm working out the kinks.
     while stackable:
         while eq[n] in "1234567890":
             num = f"{num}{eq[n]}"
