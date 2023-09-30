@@ -22,4 +22,3 @@ def tokenize(string):
                     n += 1
                 tokens[len(tokens)-1] = mathstack.pemdas(f";{tokens[len(tokens)-1]};")
     return tokens
-print(tokenize("\"hihi\"0+9 "))
