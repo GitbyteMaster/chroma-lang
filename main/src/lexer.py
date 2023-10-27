@@ -48,4 +48,3 @@ def parse(tokens, line):
         else:
           nodes[f"param{len(nodes)+1}"] = {"type":"int", "contents":token, "len":len(token)-2}
   return nodes
-print(parse("\"hello-world\"097", "1"))
