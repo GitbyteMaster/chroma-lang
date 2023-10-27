@@ -1,24 +1,49 @@
 import mathstack
+import error
+
 
 def tokenize(string):
-    n = -1
-    tokens = []
-    param = []
-    while not n == len(string)-1:
+  n = -1
+  tokens = [""]
+  while not n == len(string)-1:
+    n += 1
+    if not string[n] in ["  ", " "]:
+      if string[n] == "\"":
         n += 1
-        if not string[n] in "    ":
-            if string[n] == "\"":
-                tokens.append("")
-                param.append("str")
-                n += 1
-                while not string[n] == "\"":
-                    tokens[len(tokens)-1] = f"{tokens[len(tokens)-1]}{string[n]}"
-                    n += 1
-            if string[n] in "0987654321":
-                tokens.append("")
-                param.append("num")
-                while string[n] in "0987654321+-/*":
-                    tokens[len(tokens)-1] = f"{tokens[len(tokens)-1]}{string[n]}"
-                    n += 1
-                tokens[len(tokens)-1] = mathstack.pemdas(f";{tokens[len(tokens)-1]};")
-    return tokens
+        tokens.append("")
+        while not string[n] == "\"":
+          tokens[len(tokens)-1] = f"{tokens[len(tokens)-1]}{string[n]}"
+          n += 1
+        tokens[len(tokens)-1] = f"\"{tokens[len(tokens)-1]}\""
+      else:
+        tokens[len(tokens)-1] = f"{tokens[len(tokens)-1]}{string[n]}"
+    else:
+      tokens.append("")
+  return tokens
+def parse(tokens, line):
+  errorline = ""
+  nodes = {}
+  for x in tokenize(tokens):
+    token = x
+    if len(token) != 0:
+      if f"{token[0]}{token[len(token)-1]}" == "\"\"":
+        nodes[f"param{len(nodes)+1}"] = {"type":"str", "contents":token.split("\"")[1], "len":len(token)-2}
+      else:
+        try:
+          int(token)
+        except TypeError:
+          try:
+            float(token)
+          except TypeError:
+            if token in ["true", "True", "false", "False"]:
+              nodes[f"param{len(nodes)+1}"] = {"type":"boolean", "contents":token.split("\"")[1]}
+            else:
+              print("hi")
+          else:
+            nodes[f"param{len(nodes)+1}"] = {"type":"float", "contents":token, "len":len(token)-2}
+        except ValueError:
+          nodes[f"param{len(nodes)+1}"] = "error1"
+        else:
+          nodes[f"param{len(nodes)+1}"] = {"type":"int", "contents":token, "len":len(token)-2}
+  return nodes
+print(parse("\"hello-world\"097", "1"))
