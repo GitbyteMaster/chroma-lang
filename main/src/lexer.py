@@ -20,6 +20,8 @@ def tokenize(string):
     else:
       tokens.append("")
   return tokens
+
+# Unfinished
 def parse(tokens, line):
   errorline = ""
   nodes = {}
