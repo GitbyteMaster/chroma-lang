@@ -29,7 +29,7 @@ def parse(tokens):
     token = x
     if len(token) != 0:
       if f"{token[0]}{token[len(token)-1]}" == "\"\"":
-        nodes[f"param{len(nodes)+1}"] = {"type":"str", "contents":token.split("\"")[1], "len":len(token)-2}
+        nodes[f"obj{len(nodes)+1}"] = {"type":"str", "contents":token.split("\"")[1], "len":len(token)-2}
       else:
         try:
           int(token)
@@ -38,13 +38,13 @@ def parse(tokens):
             float(token)
           except TypeError:
             if token in ["true", "True", "false", "False"]:
-              nodes[f"param{len(nodes)+1}"] = {"type":"boolean", "contents":token.split("\"")[1]}
+              nodes[f"obj{len(nodes)+1}"] = {"type":"boolean", "contents":token.split("\"")[1]}
             else:
-              nodes[f"param{len(nodes)+1}"] = "error1"
+              nodes[f"obj{len(nodes)+1}"] = "error1"
           else:
-            nodes[f"param{len(nodes)+1}"] = {"type":"float", "contents":token, "len":len(token)-2}
+            nodes[f"obj{len(nodes)+1}"] = {"type":"float", "contents":token, "len":len(token)-2}
         except ValueError:
-          nodes[f"param{len(nodes)+1}"] = "error1"
+          nodes[f"obj{len(nodes)+1}"] = "error1"
         else:
-          nodes[f"param{len(nodes)+1}"] = {"type":"int", "contents":token, "len":len(token)-2}
+          nodes[f"obj{len(nodes)+1}"] = {"type":"int", "contents":token, "len":len(token)-2}
   return nodes
