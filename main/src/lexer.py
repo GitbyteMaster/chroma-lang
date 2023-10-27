@@ -20,10 +20,10 @@ def tokenize(string):
     else:
       tokens.append("")
   return tokens
-
-# Unfinished
-def parse(tokens, line):
-  errorline = ""
+'''
+Unfinished parser. Putting this here for now, just in case whatever happens. File was almost lost anyway.
+'''
+def parse(tokens):
   nodes = {}
   for x in tokenize(tokens):
     token = x
@@ -40,7 +40,7 @@ def parse(tokens, line):
             if token in ["true", "True", "false", "False"]:
               nodes[f"param{len(nodes)+1}"] = {"type":"boolean", "contents":token.split("\"")[1]}
             else:
-              print("hi")
+              nodes[f"param{len(nodes)+1}"] = "error1"
           else:
             nodes[f"param{len(nodes)+1}"] = {"type":"float", "contents":token, "len":len(token)-2}
         except ValueError:
