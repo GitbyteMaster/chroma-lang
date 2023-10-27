@@ -17,3 +17,6 @@ If you hadn't seen already, Chroma is an <b>experimental</b> programming languag
 echo "Hello World!";
 ```
 As far as _planned_, Chroma will a basic Python-based software. I have no plans in the long run for changing any of this. With that, however, my guess is it will undergo other large changes, so you've been warned.
+## Credit
+
+Robert Nystrom's [Crafting Interpreters](https://craftinginterpreters.com/)
