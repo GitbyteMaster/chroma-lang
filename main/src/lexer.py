@@ -7,7 +7,7 @@ def tokenize(string):
   tokens = [""]
   while not n == len(string)-1:
     n += 1
-    if not string[n] in ["  ", " "]:
+    if not string[n] in ["  ", " ", "+", "-", "*", "/"]:
       if string[n] == "\"":
         n += 1
         tokens.append("")
@@ -17,6 +17,9 @@ def tokenize(string):
         tokens[len(tokens)-1] = f"\"{tokens[len(tokens)-1]}\""
       else:
         tokens[len(tokens)-1] = f"{tokens[len(tokens)-1]}{string[n]}"
+    elif string[n] in ["+", "-", "*", "/"]:
+      tokens.append(string[n])
+      tokens.append("")
     else:
       tokens.append("")
   return tokens
@@ -37,14 +40,34 @@ def parse(tokens):
           try:
             float(token)
           except TypeError:
-            if token in ["true", "True", "false", "False"]:
+            if token in ["true", "True", "false", "False", "null", "Null"]:
               nodes[f"obj{len(nodes)+1}"] = {"type":"boolean", "contents":token.split("\"")[1]}
+            elif token in ["+", "-", "*", "/"]:
+              nodes[f"obj{len(nodes)+1}"] = {"type":"operator", "contents":token}
             else:
               nodes[f"obj{len(nodes)+1}"] = "error1"
           else:
             nodes[f"obj{len(nodes)+1}"] = {"type":"float", "contents":token, "len":len(token)-2}
         except ValueError:
-          nodes[f"obj{len(nodes)+1}"] = "error1"
+          if token in ["+", "-", "*", "/"]:
+            nodes[f"obj{len(nodes)+1}"] = {"type":"operator", "contents":token}
+          else:
+            nodes[f"obj{len(nodes)+1}"] = "error1"
         else:
           nodes[f"obj{len(nodes)+1}"] = {"type":"int", "contents":token, "len":len(token)-2}
+        if nodes[f"obj{len(nodes)}"]["type"] in ["int", "float"]:
+          if len(nodes) > 2:
+            if nodes[f"obj{len(nodes)-1}"]["type"] == "operator":
+              n = 0
+              c = len(nodes)-3
+              newnodes = {}
+              while n != c:
+                n += 1
+                newnodes[f"obj{n}"] = nodes[f"obj{n}"]
+              newnodes[f"obj{len(newnodes)+1}"] = {"type":"operator", "contents":nodes[f"obj{len(nodes)-1}"]["contents"],  "operation":{"obj1":nodes[f"obj{len(nodes)-2}"], "obj2":nodes[f"obj{len(nodes)}"]}}
+              n += 2
+              while n != len(nodes)-1:
+                n += 1
+                newnodes[f"obj{n-3}"] = nodes[f"obj{n}"]
+              nodes = newnodes
   return nodes
