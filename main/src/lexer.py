@@ -11,7 +11,7 @@ def tokenize(string):
       if string[n] == "\"":
         n += 1
         tokens.append("")
-        while string[n] != "\"":
+        while string[n] != "\"" and n != len(string)-1:
           tokens[len(tokens)-1] = f"{tokens[len(tokens)-1]}{string[n]}"
           n += 1
         tokens[len(tokens)-1] = f"\"{tokens[len(tokens)-1]}\""
