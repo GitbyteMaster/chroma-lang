@@ -4,7 +4,7 @@ sys.path.append("main/src")
 import error
 import lexer
 
-file = "hi+\"hi\"+2 ;"
+file = ""
 script = file.split(";")
 if script == ['']:
   error.FatalError("None", "File is empty", True)
