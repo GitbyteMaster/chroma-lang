@@ -1,7 +1,3 @@
-import mathstack
-import error
-
-
 def tokenize(string):
   n = -1
   tokens = [""]
