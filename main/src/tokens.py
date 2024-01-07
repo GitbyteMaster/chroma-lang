@@ -6,6 +6,8 @@ FLOAT = "FLOAT"
 # Floating Point Number
 BOOL = "BOOL"
 # Boolean
+WHITESPACE = "WHITESPACE"
+# Whitespace
 
 LPAREN = "LPAREN"
 # (
