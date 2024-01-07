@@ -7,7 +7,6 @@ whitespace = ["  ", " "]
 err = []
 
 def tokenize(text):
-  global err
   tokens = []
   n = -1
   chunk = ""
@@ -45,10 +44,3 @@ def tokenize(text):
         chunk = ""
     
   return tokens
-
-def errors():
-  return err
-
-print(tokenize("2.5\"hi\"d= "))
-print(err)
-#print(int("2+2"))
