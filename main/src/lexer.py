@@ -6,8 +6,15 @@ whitespace = ["  ", " "]
 
 err = []
 
+def Token(type, con):
+  if type != tk.STR:
+    return [type, con, [n-(len(str(con))-1), n]]
+  else:
+    return [type, con, [n-(len(str(con))+1), n]]
+
 def tokenize(text):
   tokens = []
+  global n
   n = -1
   chunk = ""
   while n != len(text)-1:
@@ -22,25 +29,32 @@ def tokenize(text):
             err.append([1, chunk])
             chunk = ""
           else:
-            tokens.append([tk.FLOAT, float(chunk)])
+            tokens.append(Token(tk.FLOAT, float(chunk)))
             chunk = ""
         else:
-          tokens.append([tk.INT, int(chunk)])
+          tokens.append(Token(tk.INT, int(chunk)))
           chunk = ""
-      else:
-        pass
     elif chunk in whitespace:
-      tokens.append([tk.WHITESPACE, chunk])
+      # Whitespace
+      tokens.append(Token(tk.WHITESPACE, chunk))
       chunk = ""
-    elif text[n] == "\"" and chunk[0] == text[n] and len(chunk) > 1:
-      tokens.append([tk.STR, chunk[1:len(chunk)-1]])
+    elif text[n] == "\"" and chunk[0] == text[n] and len(chunk) > 1 and text[n-1] != "\\":
+      # String
+      tokens.append(Token(tk.STR, chunk[1:len(chunk)-1]))
       chunk = ""
     elif text[n] in ["+", "-", "*", "/", "="]:
       if text[n-1] in ["=", "!"] and text[n] == "=":
-        tokens[len(tokens)-1] = [tk.BOOL, f"{text[n-1]}{text[n]}"]
+        # Operator
+        tokens[len(tokens)-1] = Token(tk.OPER, f"{text[n-1]}{text[n]}")
         chunk = ""
       else:
-        tokens.append([tk.OPER, text[n]])
+        tokens.append(Token(tk.OPER, text[n]))
         chunk = ""
-    
-  return tokens
+    elif chunk in ["null", "Null", "true", "True", "false", "False"]:
+      tokens.append(Token(tk.BOOL, chunk))
+      chunk = ""
+
+  if err == []:
+    return tokens
+  else:
+    return err
