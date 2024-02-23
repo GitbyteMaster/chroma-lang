@@ -1,3 +1,6 @@
+UNDEF = "UNDEF"
+# Undefined
+
 STR = "STR"
 # String
 INT = "INT"
@@ -20,4 +23,4 @@ RBRACE = "RBRACE"
 COMMA = "COMMA"
 # ,
 OPER = "OPER"
-# +, -, *, /, =, ^, <, >, ==, !=, &&,
+# +, -, *, /, =, ^, <, >, ==, !=,
