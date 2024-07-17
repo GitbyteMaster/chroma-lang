@@ -12,7 +12,7 @@
 
 If you've stumbled upon this respository, that means that you're interested in whatever this is supposed to be, want to _help_, or just want to see where this is going. All are fair approaches.
 
-If you hadn't seen already, Chroma is an <b>experimental</b> programming language made to be as flexible as it can be and to teach people like me how an actual interpreters (or compilers, if it comes down to it) work. Basically just a test drive that may or may not reach new heights.
+If you hadn't seen already, Chroma is an <b>experimental</b> programming language made to be as flexible as it can be and to teach people like me how an actual interpreter (or compiler, if it comes down to it) work. Basically just a test drive that may or may not reach new heights.
 ```
 echo "Hello World!";
 ```
