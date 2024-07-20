@@ -93,12 +93,15 @@ def tokenize(line):
         elif scan[counter][0][0] in ["QUOTATION", "DOUBLE_QUOTATION"]: # If either '"' or ''', find next one and skip tokens between them.
             subcounter = counter+1
             if not subcounter > len(scan)-1:
-                while scan[counter][0][0] != scan[subcounter][0][0]: subcounter += 1
-                combo.append([["string", line[scan[counter][2]+1:scan[subcounter][1]]], scan[counter][2], scan[subcounter][1]])
+                while scan[counter][0][0] != scan[subcounter][0][0] and subcounter != len(scan)-1: subcounter += 1
+                status = "string"
+                if scan[counter][0][0] != scan[subcounter][0][0]:
+                    status = "error2"
+                combo.append([[status, line[scan[counter][2]+1:scan[subcounter][1]]], scan[counter][2], scan[subcounter][1]])
                 counter = subcounter
             else: combo.append([["error1", scan[counter][0][1]], scan[counter][1], scan[counter][1]])
         else: combo.append(scan[counter])
-    # Identify integers and keywords.
+    # Identify integers  and keywords.
     for x in combo:
         if x[0][0] == "literal":
             try: int(x[0][1])
@@ -114,5 +117,3 @@ def tokenize(line):
 # Parser
 def parse(tokens): # (tokens) is a list of tokens.
     print("WIP")
-
-print(tokenize("!= "))
