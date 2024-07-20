@@ -37,7 +37,16 @@ WHITESPACE = string.whitespace
 KEYWORDS = {
     "with":"KEYWORD_WITH",
     "while":"KEYWORD_WHILE",
-    "as":"KEYWORD_AS"
+    "as":"KEYWORD_AS",
+    "for":"KEYWORD_FOR",
+    "in":"KEYWORD_IN",
+    "if":"KEYWORD_IF"
+    }
+
+BOOL = {
+    "!=":"NOT_EQUALS",
+    "!>":"NOT_MORE_THAN",
+    "!<":"NOT_LESS_THAN"
     }
     
 class internal:
@@ -52,7 +61,7 @@ class internal:
 
 # Lexer
 def tokenize(line):
-    # Register every single character
+    # Register every single character & make double symbol lexemes.
     scan = []
     pos = -1
     for x in line:
@@ -61,8 +70,14 @@ def tokenize(line):
             try: TOKENS[line[pos]]
             except KeyError:
                 if line[pos] in LITERAL["letters"] or line[pos] in LITERAL["numbers"]: scan.append(internal.log.literal(line[pos], pos))
-                else: scan.append([["error", line[pos]], pos, pos]) # Register unknown character for error
-            else: scan.append(internal.log.char(line[pos], pos))
+                else: scan.append([["error", line[pos]], pos, pos]) # Register unknown character for error.
+            else:
+                try: BOOL[scan[len(scan)-1][0][1]+x] # If current character 'x' + last registered char = another token, combine.
+                except: scan.append(internal.log.char(line[pos], pos))
+                else:
+                    scan[len(scan)-1][0][0] = BOOL[scan[len(scan)-1][0][1]+x]
+                    scan[len(scan)-1][0][1] += x
+                    scan[len(scan)-1][2] = pos
         else: scan.append([["whitespace", line[pos]], pos, pos])
     # Combine "literals" (lone digits and letters) & form strings.
     combo = []
@@ -75,7 +90,7 @@ def tokenize(line):
                 combo[len(combo)-1][0][1] += scan[counter][0][1]
                 combo[len(combo)-1][2] += 1
             else: combo.append(scan[counter])
-        elif scan[counter][0][0] in ["QUOTATION", "DOUBLE_QUOTATION"]:
+        elif scan[counter][0][0] in ["QUOTATION", "DOUBLE_QUOTATION"]: # If either '"' or ''', find next one and skip tokens between them.
             subcounter = counter+1
             if not subcounter > len(scan)-1:
                 while scan[counter][0][0] != scan[subcounter][0][0]: subcounter += 1
@@ -83,15 +98,21 @@ def tokenize(line):
                 counter = subcounter
             else: combo.append([["error1", scan[counter][0][1]], scan[counter][1], scan[counter][1]])
         else: combo.append(scan[counter])
-    # Identify integers
+    # Identify integers and keywords.
     for x in combo:
-        try: int(x[0][1])
-        except: pass
-        else:
-            x[0][0] = "integer"
-            x[0][1] = int(x[0][1])
+        if x[0][0] == "literal":
+            try: int(x[0][1])
+            except:
+                try: KEYWORDS[x[0][1]]
+                except: x[0][0] = "identifier"
+                else: x[0][0] = "keyword"
+            else:
+                x[0][0] = "integer"
+                x[0][1] = int(x[0][1])
     return combo
 
 # Parser
 def parse(tokens): # (tokens) is a list of tokens.
-    
+    print("WIP")
+
+print(tokenize("!= "))
